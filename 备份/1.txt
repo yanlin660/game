@@ -1,0 +1,41 @@
+window.onload=function () {
+            var canvas=document.getElementsByTagName("canvas")[0];
+            var cobj=canvas.getContext("2d");
+            function obj() {
+                this.x=0;
+                this.y=0;
+                this.width=100;
+                this.height=100;
+                this.speed=2;
+            }
+            obj.prototype={
+                draw:function () {
+                    cobj.save();
+                    cobj.translate(this.x,this.y);
+                    cobj.beginPath();
+                    cobj.moveTo(20+50,20);
+                    cobj.quadraticCurveTo(50,100,100,0);
+                    cobj.closePath();
+                    cobj.fill();
+                    cobj.restore();
+                },
+                updata:function () {
+                    this.x+=this.speed;
+                }
+
+            };
+            var obj1=new obj();
+            var obj2=new obj();
+            obj2.x=500;
+            obj2.speed=-2;
+            setInterval(function(){
+                cobj.clearRect(0,0,1000,600);
+                obj1.draw();
+                obj1.updata();
+                obj2.draw();
+                obj2.updata();
+                if(hitPix(canvas,cobj,obj1,obj2)){
+                    alert("撞车了")
+                }
+            },50)
+        }

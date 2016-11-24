@@ -1,0 +1,76 @@
+html,body{
+    margin:0;
+    padding:0;
+    background: #333;
+    overflow: hidden;
+}
+/*背景图*/
+canvas{
+    background:url(../img/bg.jpg) repeat-x ;background-size: auto 80%;background-position: 0 0;
+    position: fixed;top: 0;left: 0;right: 0;bottom: 0;margin: auto;
+}
+.start{
+    width:30%;height: 40%;border: 3px solid #fff;z-index: 1;
+    background: rgba(255,255,255,.6);
+    box-shadow: 0 0 10px #000;border-radius: 20px;
+    position: fixed;left: 0;top: 0;right: 0;bottom: 0;margin: auto;
+    animation: start 2s ease forwards;
+}
+@keyframes start {
+    0%{
+        transform: translateY(-1000px);
+    }
+    80%{
+        transform: translateY(0);
+    }
+}
+@keyframes start1 {
+    0%{
+        transform: translateY(0);
+    }
+    100%{
+        transform: translateY(-1000px);
+    }
+}
+.welcome{
+    font-size: 36px;line-height: 100px;color: skyblue;
+}
+.mask{
+    width: 100%;height: 100%;background: rgba(0,0,0,.5);
+    position: fixed;left: 0;top: 0;
+    animation: mask 2s ease forwards;
+}
+@keyframes mask {
+    0%{
+        background: rgba(0,0,0,.2)
+    }
+    80%{
+        background: rgba(0,0,0,.5)
+    }
+}
+@keyframes mask1{
+    0%{
+        background: rgba(0,0,0,.5)
+    }
+    100%{
+        background: rgba(0,0,0,0)
+    }
+}
+.fs{
+    width: 200px;height: 40px;position: fixed;left: 20px;bottom:20px;
+    border-radius: 20px;
+    box-shadow: 0 0 20px red inset;color: #fffffb;font-size: 24px;text-indent: 2em;line-height: 40px;
+}
+.gk{
+    width: 200px;height: 40px;position: fixed;left: 450px;bottom:20px;
+    border-radius: 20px;
+    box-shadow: 0 0 20px yellow inset;color: #fffffb;font-size: 24px;text-indent: 2em;line-height: 40px;
+}
+.sm{
+    width: 200px;height: 40px;position: fixed;right: 20px;bottom:20px;
+    border-radius: 20px;
+    box-shadow: 0 0 20px green inset;color: #fffffb;font-size: 24px;text-indent: 2em;line-height: 40px;
+}
+span{
+    color: #a3d7ff;
+}
