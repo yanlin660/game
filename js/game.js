@@ -1,7 +1,8 @@
-function person(canvas,cobj,runs,jumps){
+function person(canvas,cobj,runs,jumps,dungs){
     this.canvas=canvas;
     this.cobj=cobj;
     this.runs=runs;
+    this.dungs=dungs;
     this.jumps=jumps;
     this.x=0;
     this.y=270;
@@ -45,7 +46,7 @@ zidan.prototype={
         this.cobj.drawImage(this.zhidan[this.state],0,0,392,220,0,0,this.width,this.height);
         this.cobj.restore();
     }
-}
+};
 //障碍物
 function hinder(canvas,cobj,hinderImg){
     this.canvas=canvas;
@@ -53,7 +54,7 @@ function hinder(canvas,cobj,hinderImg){
     this.hinderImg=hinderImg;
     this.state=0;
     this.x=canvas.width-20;
-    this.y=350-(100*Math.random());
+    this.y=350-(330*Math.random());
     this.width=400;
     this.height=400;
     this.speedx=6;
@@ -65,7 +66,7 @@ hinder.prototype={
         this.cobj.drawImage(this.hinderImg[this.state],0,0,800,500,0,0,this.width,this.height);
         this.cobj.restore();
     }
-}
+};
 //血
 function lizi(cobj,color){
     this.cobj=cobj;
@@ -95,7 +96,7 @@ lizi.prototype = {
         this.y+=this.speedy;
         this.r-=this.speedr;
     }
-}
+};
 function xue(cobj,x,y,color){
     var arr = [];
     for(var i = 0;i<30;i++) {
@@ -118,7 +119,7 @@ function xue(cobj,x,y,color){
     },50)
 }
 //游戏的主类
-function game(canvas,cobj,runs,jumps,hinderImg,zhidan,runA,jumpA,zhuangA,zhuangB,overA){
+function game(canvas,cobj,runs,jumps,hinderImg,zhidan,runA,jumpA,zhuangA,zhuangB,overA,dungs){
     this.canvas=canvas;
     this.cobj=cobj;
     this.hinderImg=hinderImg;
@@ -130,7 +131,7 @@ function game(canvas,cobj,runs,jumps,hinderImg,zhidan,runA,jumpA,zhuangA,zhuangB
     this.overA=overA;
     this.height=canvas.height;
     this.width=canvas.width;
-    this.person=new person(canvas,cobj,runs,jumps);
+    this.person=new person(canvas,cobj,runs,jumps,dungs);
     this.backx=0;
     this.backSpeed=6;
     this.score=0;//积分
@@ -165,8 +166,7 @@ game.prototype={
             that.backSpeed=6;
             if(that.person.status=="runs"){
                 that.person.state =that.person.num%8;///控制第几张
-            }
-            else{
+            } else {
                 that.person.state = 0;
             }
             /*让人物的x轴发生变化*/
@@ -200,9 +200,23 @@ game.prototype={
                     that.zhuangA.play();
                     if(!that.hinderArr[i].flag){
                         that.color="#ccc";
+                        that.score++;
+                        document.querySelectorAll("span")[0].innerHTML=that.score;
                         xue(that.cobj,that.zidan.x+that.zidan.width/2,that.zidan.y+that.zidan.height/2,that.color);
                         that.hinderArr[i].width=0;
                         that.hinderArr[i].flag=true;
+                        if(that.score>3*that.z){
+                            that.z++;
+                            that.score=0;
+                            that.rand=(4-that.z+Math.ceil(6*Math.random()))*1000
+                            that.person.life++;
+                            document.querySelectorAll("span")[2].innerHTML=that.person.life;
+                            if(that.person.life>5){
+                                alert("你很健康，请继续奔跑吧！")
+                            }
+                            document.querySelectorAll("span")[0].innerHTML=that.score;
+                            document.querySelectorAll("span")[1].innerHTML=that.z;
+                        }
                     }
                     if(that.hinderArr[i].flag2){
                         alert("打到钱袋子，积分+1")
@@ -212,9 +226,9 @@ game.prototype={
                         that.hinderArr[i].flag2=false;
                     }
                     if(that.hinderArr[i].flag3){
-                        alert("打破月光宝盒，难度提升10次")
+                        alert("打破月光宝盒，难度提升5次")
                         that.hinderArr[i].width=0
-                        for(var q=0;q<10;q++){
+                        for(var q=0;q<5;q++){
                             that.z++;
                         }
                         document.querySelectorAll("span")[1].innerHTML=that.z;
@@ -225,6 +239,7 @@ game.prototype={
                 if(hitPix(that.canvas,that.cobj,that.person,that.hinderArr[i])){
                     that.zhuangB.play();
                     if(!that.hinderArr[i].flag){
+                            that.color="red";
                             xue(that.cobj,that.person.x+that.person.width/2,that.person.y+that.person.height/2,that.color);
                             that.person.life--;
                             that.hinderArr[i].width=0;
@@ -238,7 +253,7 @@ game.prototype={
                     }
                     if(that.hinderArr[i].flag2){
                         that.hinderArr[i].width=0
-                        alert("捡到钱袋子，积分+3")
+                        alert("捡到钱袋子，积分+2")
                             that.score++;
                             that.score++;
                             that.person.life++;
@@ -248,7 +263,7 @@ game.prototype={
                     if(that.hinderArr[i].flag3){
                         alert("捡到月光宝盒，随机出现关卡，生命值刷新")
                         that.hinderArr[i].width=0
-                        for(var j=0;j<Math.floor(5*Math.random());j++){
+                        for(var j=0;j<Math.floor(3*Math.random());j++){
                             that.z++;
                         }
                         that.person.life=3;
@@ -304,6 +319,9 @@ game.prototype={
                 var inita = 0;
                 var speeda = 15;
                 var r = 80;
+                if(that.person.y<30){
+                    that.person.y=50
+                }
                 var y = that.person.y//记录
                 /*跳跃动画*/
                 var t = setInterval(function () {
@@ -314,13 +332,21 @@ game.prototype={
                         that.runA.play();
                         flag = true;
                         that.person.status = "runs";
-                    }
-                    else {
+                    } else {
                         var top = Math.sin(inita * Math.PI / 180) * r;
                         that.person.y = y - top;
                         //that.person.y=y;
                     }
                 }, 50)
+            }else if (e.keyCode == 40) {  //空格
+                that.person.status = "dungs";
+                that.person.y=350;
+                document.onkeyup=function () {
+                    flag = true;
+                    that.person.y=270;
+                    that.person.status = "runs";
+                }
+                /*下蹲*/
             }
         }
     },

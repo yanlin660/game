@@ -7,6 +7,7 @@ $(function () {
     var cobj=canvas.getContext("2d");
     var runs=$(".run");
     var jumps=$(".jump");
+    var dungs=$(".dung");
     var zhidan=$(".zhidan");
     var start=$(".start");
     var hinderImg=$(".hinder");
@@ -17,7 +18,7 @@ $(function () {
     var zhuangA=document.querySelector(".zhuangA");
     var zhuangB=document.querySelector(".zhuangB");
     var overA=document.querySelector(".overA");
-    var gameobj=new game(canvas,cobj,runs,jumps,hinderImg,zhidan,runA,jumpA,zhuangA,zhuangB,overA);
+    var gameobj=new game(canvas,cobj,runs,jumps,hinderImg,zhidan,runA,jumpA,zhuangA,zhuangB,overA,dungs);
     btn.one("click",function (e) {
         e.preventDefault();
         gameobj.play(start,mask);
